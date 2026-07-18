@@ -1,6 +1,6 @@
 // EcoWatt AI - API Utility Functions
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = `${window.location.origin}/api`;
 
 // Get token from localStorage
 function getToken() {

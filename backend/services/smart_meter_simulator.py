@@ -8,6 +8,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional
 import random
+import re
 
 
 class SmartMeterSimulator:
@@ -153,40 +154,98 @@ class SmartMeterSimulator:
         df = pd.DataFrame(readings)
         return df
     
+    @staticmethod
+    def _normalize_header(header: str) -> str:
+        """Normalize CSV column names so common header variants map to the same field."""
+        if header is None:
+            return ""
+        normalized = str(header).strip().lower()
+        normalized = re.sub(r'[^a-z0-9]+', '_', normalized)
+        return normalized.strip('_')
+
+    def _find_matching_column(self, columns, aliases: List[str]):
+        """Find a matching column from common aliases by normalized header name."""
+        normalized_lookup = {
+            self._normalize_header(column): column for column in columns
+        }
+
+        for alias in aliases:
+            if alias in normalized_lookup:
+                return normalized_lookup[alias]
+
+        for column in columns:
+            normalized = self._normalize_header(column)
+            if normalized in aliases:
+                return column
+
+        return None
+
     def parse_csv_upload(self, csv_file_path: str) -> List[Dict]:
         """
-        Parse uploaded CSV file with smart meter data
-        
-        Expected columns: timestamp, voltage, current, power, energy, frequency, power_factor
-        
-        Args:
-            csv_file_path: Path to CSV file
-            
-        Returns:
-            List of smart meter data dictionaries
+        Parse uploaded CSV file with smart meter data.
+
+        Accepts the app's exported headers such as Timestamp / Voltage (V) / Current (A)
+        and common alternatives like timestamp / voltage / current / power / energy.
         """
         try:
             df = pd.read_csv(csv_file_path)
-            
-            # Validate required columns
-            required_columns = ['timestamp', 'voltage', 'current', 'power', 'energy']
-            missing_columns = [col for col in required_columns if col not in df.columns]
-            
-            if missing_columns:
-                raise ValueError(f"Missing required columns: {missing_columns}")
-            
-            # Convert to list of dictionaries
-            readings = df.to_dict('records')
-            
-            # Parse timestamps
-            for reading in readings:
-                if isinstance(reading['timestamp'], str):
-                    reading['timestamp'] = pd.to_datetime(reading['timestamp'])
-            
+            if df.empty:
+                return []
+
+            timestamp_col = self._find_matching_column(df.columns, ['timestamp', 'datetime', 'date_time', 'date', 'time'])
+            voltage_col = self._find_matching_column(df.columns, ['voltage', 'voltage_v', 'volts', 'voltage_volts'])
+            current_col = self._find_matching_column(df.columns, ['current', 'current_a', 'amps', 'amperes'])
+            power_col = self._find_matching_column(df.columns, ['power', 'power_w', 'watts'])
+            energy_col = self._find_matching_column(df.columns, ['energy', 'energy_kwh', 'kwh'])
+            frequency_col = self._find_matching_column(df.columns, ['frequency', 'frequency_hz', 'hz'])
+            power_factor_col = self._find_matching_column(df.columns, ['power_factor', 'power_factor_pf', 'pf'])
+
+            if not any([timestamp_col, voltage_col, current_col, power_col, energy_col, frequency_col, power_factor_col]):
+                raise ValueError(
+                    "No recognizable energy columns found. Expected columns like timestamp, voltage, current, power, energy, frequency, power_factor or their common variants."
+                )
+
+            readings = []
+            for row in df.to_dict('records'):
+                record = {}
+
+                if timestamp_col and timestamp_col in row:
+                    raw_timestamp = row[timestamp_col]
+                    if pd.isna(raw_timestamp):
+                        record['timestamp'] = datetime.utcnow()
+                    elif isinstance(raw_timestamp, str):
+                        record['timestamp'] = pd.to_datetime(raw_timestamp)
+                    else:
+                        record['timestamp'] = pd.to_datetime(raw_timestamp)
+                else:
+                    record['timestamp'] = datetime.utcnow()
+
+                for target_col, source_col in [
+                    ('voltage', voltage_col),
+                    ('current', current_col),
+                    ('power', power_col),
+                    ('energy', energy_col),
+                    ('frequency', frequency_col),
+                    ('power_factor', power_factor_col),
+                ]:
+                    if source_col and source_col in row:
+                        value = row[source_col]
+                        if value is None or (isinstance(value, float) and pd.isna(value)):
+                            record[target_col] = None
+                        else:
+                            try:
+                                record[target_col] = float(value)
+                            except (TypeError, ValueError):
+                                record[target_col] = value
+                    else:
+                        record[target_col] = None
+
+                readings.append(record)
+
             return readings
-            
+
         except Exception as e:
-            raise ValueError(f"Error parsing CSV file: {str(e)}")
+            raise ValueError(f"Error parsing CSV file: {str(e)}") from e
     
     def calculate_daily_totals(self, readings: List[Dict]) -> Dict:
         """
