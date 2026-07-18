@@ -38,6 +38,21 @@
     gap: 1rem;
 }
 
+/* Upload card */
+.upload-card {
+    border-left: 4px solid var(--primary-color);
+    background: linear-gradient(135deg, #f0fdf4, #ffffff);
+}
+
+.upload-help {
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.upload-button {
+    margin-top: 0.5rem;
+}
+
 /* Stats Grid */
 .stats-grid {
     display: grid;

@@ -43,12 +43,21 @@
                     <p>Detailed insights into your energy consumption patterns</p>
                 </div>
                 <div class="dashboard-actions">
-                    <label for="csvFileInput" class="btn btn-outline" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem;">
+                    <button id="analyzeBtn" class="btn btn-primary">Run Analysis</button>
+                    <button id="exportBtn" class="btn btn-outline">Export Data</button>
+                </div>
+            </div>
+
+            <div class="card upload-card">
+                <div class="card-header">
+                    <h3>Upload Your Data</h3>
+                </div>
+                <div class="card-content">
+                    <p class="upload-help">Choose a CSV file to import smart meter readings for this account.</p>
+                    <label for="csvFileInput" class="btn btn-outline upload-button" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">
                         <span>📁</span> Upload CSV
                     </label>
                     <input id="csvFileInput" type="file" accept=".csv,text/csv" style="display:none;">
-                    <button id="analyzeBtn" class="btn btn-primary">Run Analysis</button>
-                    <button id="exportBtn" class="btn btn-outline">Export Data</button>
                 </div>
             </div>
 
