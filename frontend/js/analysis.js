@@ -6,6 +6,7 @@ import { energyAPI, appliancesAPI, alertsAPI, authAPI } from './api.js';
 const loadingOverlay = document.getElementById('loadingOverlay');
 const analyzeBtn = document.getElementById('analyzeBtn');
 const exportBtn = document.getElementById('exportBtn');
+const csvFileInput = document.getElementById('csvFileInput');
 const detectAppliancesBtn = document.getElementById('detectAppliancesBtn');
 const detectLeaksBtn = document.getElementById('detectLeaksBtn');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
@@ -438,6 +439,27 @@ function exportData() {
     window.URL.revokeObjectURL(url);
 }
 
+// Upload CSV file
+async function uploadCSVFile() {
+    const file = csvFileInput.files?.[0];
+    if (!file) {
+        alert('Please choose a CSV file first.');
+        return;
+    }
+
+    setLoading(true);
+    try {
+        const result = await energyAPI.uploadCSV(file);
+        alert(`Uploaded ${result.count || 0} rows successfully.`);
+        await runAnalysis();
+    } catch (error) {
+        console.error('CSV upload failed:', error);
+        alert(error.message || 'Failed to upload CSV file.');
+    } finally {
+        setLoading(false);
+    }
+}
+
 // Run analysis
 async function runAnalysis() {
     setLoading(true);
@@ -476,6 +498,7 @@ document.querySelectorAll('.time-range-btn').forEach(button => {
 // Event listeners
 analyzeBtn.addEventListener('click', runAnalysis);
 exportBtn.addEventListener('click', exportData);
+csvFileInput.addEventListener('change', uploadCSVFile);
 detectAppliancesBtn.addEventListener('click', detectAppliances);
 detectLeaksBtn.addEventListener('click', detectLeaks);
 loadMoreBtn.addEventListener('click', loadMoreData);

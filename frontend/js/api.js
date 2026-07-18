@@ -155,6 +155,27 @@ export const energyAPI = {
     
     async simulateData(count = 10) {
         return post(`/energy/simulate?count=${count}`);
+    },
+
+    async uploadCSV(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE}/energy/upload-csv`, {
+            method: 'POST',
+            headers: {
+                ...(token ? { Authorization: `Bearer ${token}` } : {})
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({ detail: 'CSV upload failed' }));
+            throw new Error(error.detail || 'CSV upload failed');
+        }
+
+        return await response.json();
     }
 };
 
