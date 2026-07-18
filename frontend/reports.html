@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - EcoWatt AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-nav">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>EcoWatt AI</h1>
+                <span class="tagline">Reports</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="analysis.html">Analysis</a></li>
+                <li><a href="reports.html" class="active">Reports</a></li>
+                <li><a href="chatbot.html">AI Chatbot</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="#" id="logoutBtn" class="btn btn-outline">Logout</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="container">
+            <!-- Reports Header -->
+            <div class="dashboard-header">
+                <div>
+                    <h1>Energy Reports</h1>
+                    <p>Generate and download detailed energy consumption reports</p>
+                </div>
+                <div class="dashboard-actions">
+                    <button id="generateReportBtn" class="btn btn-primary">Generate Report</button>
+                </div>
+            </div>
+
+            <!-- Report Generator -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Generate New Report</h3>
+                </div>
+                <div class="card-content">
+                    <form id="reportForm" class="report-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reportType">Report Type</label>
+                                <select id="reportType" name="reportType" required>
+                                    <option value="monthly">Monthly Report</option>
+                                    <option value="weekly">Weekly Report</option>
+                                    <option value="custom">Custom Range</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="startDate">Start Date</label>
+                                <input type="date" id="startDate" name="startDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="endDate">End Date</label>
+                                <input type="date" id="endDate" name="endDate">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Generate</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Reports List -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Generated Reports</h3>
+                </div>
+                <div class="card-content">
+                    <div id="reportsList" class="reports-list">
+                        <p class="empty-state">No reports generated yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Preview -->
+            <div class="card" id="reportPreviewCard" style="display: none;">
+                <div class="card-header">
+                    <h3>Report Preview</h3>
+                    <button id="closePreviewBtn" class="btn btn-sm btn-outline">Close</button>
+                </div>
+                <div class="card-content">
+                    <div id="reportPreview" class="report-preview"></div>
+                </div>
+                <div class="card-footer">
+                    <button id="downloadReportBtn" class="btn btn-primary">Download Report</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Generating report...</p>
+    </div>
+
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/reports.js"></script>
+</body>
+</html>

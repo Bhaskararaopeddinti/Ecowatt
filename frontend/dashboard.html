@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EcoWatt AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-nav">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>EcoWatt AI</h1>
+                <span class="tagline">Dashboard</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="analysis.html">Analysis</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="chatbot.html">AI Chatbot</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="#" id="logoutBtn" class="btn btn-outline">Logout</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div>
+                    <h1>Energy Dashboard</h1>
+                    <p>Welcome back! Here's your energy overview.</p>
+                </div>
+                <div class="dashboard-actions">
+                    <button id="simulateBtn" class="btn btn-primary">Simulate Data</button>
+                    <button id="refreshBtn" class="btn btn-outline">Refresh</button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon today">⚡</div>
+                    <div class="stat-content">
+                        <h3>Today's Usage</h3>
+                        <p class="stat-value" id="todayUsage">0 kWh</p>
+                        <span class="stat-change" id="todayChange">--</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon monthly">📊</div>
+                    <div class="stat-content">
+                        <h3>Monthly Usage</h3>
+                        <p class="stat-value" id="monthlyUsage">0 kWh</p>
+                        <span class="stat-change" id="monthlyChange">--</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon bill">💰</div>
+                    <div class="stat-content">
+                        <h3>Current Bill</h3>
+                        <p class="stat-value" id="currentBill">₹0</p>
+                        <span class="stat-change" id="billChange">--</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon predicted">🎯</div>
+                    <div class="stat-content">
+                        <h3>Predicted Bill</h3>
+                        <p class="stat-value" id="predictedBill">₹0</p>
+                        <span class="stat-confidence" id="predictionConfidence">--</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon carbon">🌱</div>
+                    <div class="stat-content">
+                        <h3>Carbon Footprint</h3>
+                        <p class="stat-value" id="carbonFootprint">0 kg</p>
+                        <span class="stat-change" id="carbonChange">--</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon score">⭐</div>
+                    <div class="stat-content">
+                        <h3>Energy Score</h3>
+                        <p class="stat-value" id="energyScore">0</p>
+                        <span class="stat-label">out of 100</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Energy Usage Over Time</h3>
+                        <div class="chart-controls">
+                            <button class="chart-period active" data-days="7">7 Days</button>
+                            <button class="chart-period" data-days="30">30 Days</button>
+                            <button class="chart-period" data-days="90">90 Days</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="usageChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Appliance Consumption</h3>
+                        <button id="detectAppliancesBtn" class="btn btn-sm btn-primary">Detect Appliances</button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="applianceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts and Recommendations -->
+            <div class="alerts-recommendations">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>⚠️ Energy Alerts</h3>
+                        <span class="badge" id="alertCount">0</span>
+                    </div>
+                    <div class="card-content" id="alertsList">
+                        <p class="empty-state">No active alerts</p>
+                    </div>
+                    <div class="card-footer">
+                        <button id="detectLeaksBtn" class="btn btn-outline btn-sm">Detect Energy Leaks</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>💡 Recommendations</h3>
+                        <span class="badge" id="recommendationCount">0</span>
+                    </div>
+                    <div class="card-content" id="recommendationsList">
+                        <p class="empty-state">No recommendations available</p>
+                    </div>
+                    <div class="card-footer">
+                        <button id="generateRecommendationsBtn" class="btn btn-outline btn-sm">Generate Recommendations</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>📋 Recent Activity</h3>
+                </div>
+                <div class="card-content">
+                    <div id="activityList" class="activity-list">
+                        <p class="empty-state">No recent activity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

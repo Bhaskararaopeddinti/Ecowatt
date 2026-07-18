@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - EcoWatt AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-nav">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>EcoWatt AI</h1>
+                <span class="tagline">Settings</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="analysis.html">Analysis</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="chatbot.html">AI Chatbot</a></li>
+                <li><a href="settings.html" class="active">Settings</a></li>
+                <li><a href="#" id="logoutBtn" class="btn btn-outline">Logout</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="container">
+            <!-- Settings Header -->
+            <div class="dashboard-header">
+                <div>
+                    <h1>Settings</h1>
+                    <p>Manage your account and application preferences</p>
+                </div>
+                <div class="dashboard-actions">
+                    <button id="saveSettingsBtn" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+
+            <!-- Settings Sections -->
+            <div class="settings-grid">
+                <!-- Profile Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>👤 Profile Settings</h3>
+                    </div>
+                    <div class="card-content">
+                        <form id="profileForm" class="settings-form">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" name="username" disabled>
+                                <small class="form-text">Username cannot be changed</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" disabled>
+                                <small class="form-text">Email cannot be changed</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" name="fullName">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea id="address" name="address" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Energy Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>⚡ Energy Settings</h3>
+                    </div>
+                    <div class="card-content">
+                        <form id="energyForm" class="settings-form">
+                            <div class="form-group">
+                                <label for="electricityRate">Electricity Rate (₹/kWh)</label>
+                                <input type="number" id="electricityRate" name="electricityRate" step="0.01" min="0">
+                                <small class="form-text">Your electricity rate per kilowatt-hour</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="currency">Currency Symbol</label>
+                                <input type="text" id="currency" name="currency" maxlength="3">
+                                <small class="form-text">Currency symbol for display</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="carbonFactor">Carbon Factor (kg CO2/kWh)</label>
+                                <input type="number" id="carbonFactor" name="carbonFactor" step="0.01" min="0">
+                                <small class="form-text">CO2 emissions per kWh for carbon footprint calculation</small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Appearance Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🎨 Appearance</h3>
+                    </div>
+                    <div class="card-content">
+                        <form id="appearanceForm" class="settings-form">
+                            <div class="form-group">
+                                <label for="theme">Theme</label>
+                                <select id="theme" name="theme">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                    <option value="auto">Auto (System)</option>
+                                </select>
+                                <small class="form-text">Choose your preferred theme</small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🔔 Notifications</h3>
+                    </div>
+                    <div class="card-content">
+                        <form id="notificationForm" class="settings-form">
+                            <div class="form-group checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="notificationsEnabled" name="notificationsEnabled">
+                                    <span>Enable Notifications</span>
+                                </label>
+                                <small class="form-text">Receive in-app notifications for alerts and updates</small>
+                            </div>
+                            <div class="form-group checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="emailAlerts" name="emailAlerts">
+                                    <span>Email Alerts</span>
+                                </label>
+                                <small class="form-text">Receive energy alerts via email</small>
+                            </div>
+                            <div class="form-group checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="smsAlerts" name="smsAlerts">
+                                    <span>SMS Alerts</span>
+                                </label>
+                                <small class="form-text">Receive critical alerts via SMS</small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="card danger-zone">
+                    <div class="card-header">
+                        <h3>⚠️ Danger Zone</h3>
+                    </div>
+                    <div class="card-content">
+                        <p class="warning-text">These actions are irreversible. Please be careful.</p>
+                        <div class="danger-actions">
+                            <button id="clearDataBtn" class="btn btn-outline btn-danger">Clear All Data</button>
+                            <button id="deleteAccountBtn" class="btn btn-outline btn-danger">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Saving...</p>
+    </div>
+
+    <style>
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group input:disabled {
+            background: var(--bg-light);
+            cursor: not-allowed;
+        }
+
+        .form-text {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .checkbox-group {
+            flex-direction: row;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .danger-zone {
+            border: 2px solid #ef4444;
+        }
+
+        .danger-zone .card-header h3 {
+            color: #ef4444;
+        }
+
+        .warning-text {
+            color: #ef4444;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .danger-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-danger {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .danger-actions {
+                flex-direction: column;
+            }
+
+            .danger-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/settings.js"></script>
+</body>
+</html>
